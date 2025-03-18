@@ -78,7 +78,6 @@ function mostrarProductoPantallaCompleta(producto) {
     const productoElement = document.createElement('div');
     productoElement.className = 'fullscreen-product product-animation';
     
-    // Note the reordering of elements to match the screenshot
     productoElement.innerHTML = `
         <div class="codigo">Código: ${producto.Barras}</div>
         <div class="precio">$${producto.Precio.toLocaleString('es-ES')}.00</div>

@@ -18,7 +18,6 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 
-// Configuración de la base de datos SQL Server
 const dbConfig = {
     user: 'sa',
     password: 'Sebastortu99',
@@ -30,7 +29,6 @@ const dbConfig = {
     }
 };
 
-// Función para conectarse a la base de datos
 async function connectToDatabase() {
     try {
         await sql.connect(dbConfig);
@@ -41,7 +39,6 @@ async function connectToDatabase() {
 }
 connectToDatabase();
 
-// Ruta para buscar un producto por código de barras
 app.get('/api/productos/:codigo', async (req, res) => {
     const { codigo } = req.params;
     try {
@@ -89,8 +86,7 @@ app.get('/api/allproductos', async (req, res) => {
                 CAST(v121_id_item AS VARCHAR(20)) AS Id,  
                 ISNULL(RTRIM(f131_id), '') AS Barras,  
                 v121_referencia,
-               
-                -- Usar la función con la lista de precios desde variable de entorno
+                
                 dbo.F_GENERICO_HALLAR_PREC_VTA(
                     v121_id_cia,
                     '${listaPreco}',
@@ -98,7 +94,7 @@ app.get('/api/allproductos', async (req, res) => {
                     GETDATE(),
                     v121_id_unidad_inventario
                 ) AS Precio,
-               
+                
                 CASE
                     WHEN ISNUMERIC(LTRIM(RTRIM(dbo.F_GENERICO_HALLAR_MOVTO_ENT(f131_id_cia, ISNULL(v121_rowid_entidad_item, 0), '${centroOperacion}', 'FACTOR', 3)))) = 1
                     THEN CAST(LTRIM(RTRIM(dbo.F_GENERICO_HALLAR_MOVTO_ENT(f131_id_cia, ISNULL(v121_rowid_entidad_item, 0), '${centroOperacion}', 'FACTOR', 3))) AS DECIMAL(28,4))
@@ -108,12 +104,12 @@ app.get('/api/allproductos', async (req, res) => {
             FROM t131_mc_items_barras
             INNER JOIN t121_mc_items_extensiones ON f121_rowid = f131_rowid_item_ext  
             INNER JOIN v121 ON f121_rowid_item = v121_rowid_item AND f121_rowid = v121_rowid_item_ext  
-            INNER JOIN t101_mc_unidades_medida ON f101_id_cia = v121_id_cia AND f101_id = v121_id_unidad_inventario`;
-       
+            INNER JOIN t101_mc_unidades_medida ON f101_id_cia = v121_id_cia AND f101_id = v121_id_unidad_inventario
+            WHERE f126_id_lista_precio = '${listaPreco}' AND f126_id_cia = ${company} AND f131_id_co = '${centroOperacion}' AND f131_id = '${codigo}'`;
+
         if (codigo) {
-            query += ` WHERE ISNULL(RTRIM(f131_id), '') = '${codigo}'`;
+            query += `WHERE ISNULL(RTRIM(f131_id), '') = '${codigo}'`;
         }
-       
         const result = await pool.request().query(query);
         res.json(result.recordset);
     } catch (err) {
@@ -121,7 +117,6 @@ app.get('/api/allproductos', async (req, res) => {
         res.status(500).json({ mensaje: 'Error en el servidor', error: err.message });
     }
 });
-// Iniciar el servidor
 app.listen(port, () => {
     console.log(`Servidor corriendo en http://localhost:${port}`);
 });
