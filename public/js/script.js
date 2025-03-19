@@ -57,6 +57,9 @@ function procesarCodigoEscaneado(codigo) {
         if (productContainer) {
             productContainer.innerHTML = '';
         }
+        
+        // Asegúrate de quitar la clase product-active
+        document.body.classList.remove('product-active');
     });
 }
 
@@ -66,7 +69,11 @@ function salirModoPantallaCompleta() {
 }
 
 function mostrarProductoPantallaCompleta(producto) {
-    console.log(producto)
+    console.log(producto);
+    
+    // Activa el modo producto
+    document.body.classList.add('product-active');
+    
     const mensajeExistente = document.querySelector('.fullscreen-message');
     if (mensajeExistente) {
         mensajeExistente.style.display = 'none';
@@ -87,11 +94,23 @@ function mostrarProductoPantallaCompleta(producto) {
     
     productContainer.appendChild(productoElement);
     
+    // Pequeño retraso para que se active la transición
+    setTimeout(() => {
+        const product = document.querySelector('.fullscreen-product');
+        if (product) {
+            product.style.transform = 'translateX(0)';
+            product.style.opacity = '1';
+        }
+    }, 50);
+    
     const audio = new Audio('/sounds/beep-success.mp3');
     audio.play().catch(e => console.log('No se pudo reproducir el sonido'));
 }
 
 function mostrarProductoNoEncontradoPantallaCompleta() {
+    // Remover clase de producto activo
+    document.body.classList.remove('product-active');
+    
     const mensajeExistente = document.querySelector('.fullscreen-message');
     if (mensajeExistente) {
         mensajeExistente.style.display = 'block';

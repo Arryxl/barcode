@@ -7,13 +7,29 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+    <!-- Video promocional -->
+    <div class="promo-video-container">
+        <video class="promo-video" autoplay loop muted>
+            <source src="/videos/promotional.mp4" type="video/mp4">
+            Tu navegador no soporta videos HTML5.
+        </video>
+    </div>
+    
+    <!-- Logo del supermercado -->
+    <div class="logo-container">
+        <img src="/images/logo.png" alt="Logo Supermercado" class="logo">
+    </div>
+
     <button class="fullscreen-exit">×</button>
+    
     <div class="fullscreen-header">
         <h1>Escáner de Productos</h1>
     </div>
+    
     <div class="fullscreen-message">
         Escanea un código de barras para ver la información del producto...
     </div>
+    
     <div id="product-container"></div>
 
     <script src="/js/script.js"></script>

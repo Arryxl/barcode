@@ -6,6 +6,53 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    overflow: hidden;
+}
+
+/* Estilos para el video promocional */
+.promo-video-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    overflow: hidden;
+    transition: opacity 0.5s ease;
+}
+
+.promo-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Estilos para el logo */
+.logo-container {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1500;
+    transition: all 0.8s ease;
+}
+
+.logo {
+    width: 150px;
+    height: auto;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+/* Posición del logo cuando se muestra un producto */
+.product-active .logo-container {
+    left: 15%;
+    top: 50%;
+    transform: translateY(-50%) translateX(-50%);
+}
+
+/* Ocultar video cuando se muestra un producto */
+.product-active .promo-video-container {
+    opacity: 0;
+    pointer-events: none;
 }
 
 .fullscreen-mode {
@@ -14,7 +61,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #f0f8ff;
+    background-color: rgba(240, 248, 255, 0.9);
     z-index: 9999;
     display: flex;
     justify-content: center;
@@ -65,25 +112,45 @@ body {
     font-size: 2rem;
     padding: 20px;
     margin-top: 80px;
+    z-index: 1100;
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.85);
+    border-radius: 10px;
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #product-container {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
     margin-top: 80px;
-    min-height: 60vh;
+    min-height: 70vh;
+    width: 100%;
+    z-index: 1200;
+    position: relative;
+    transition: all 0.5s ease;
+    padding-right: 5%;
 }
 
 .fullscreen-product {
-    width: 80%;
-    max-width: 600px;
+    width: 70%;
+    max-width: 800px;
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
     padding: 30px;
     text-align: center;
     position: relative;
+    transform: translateX(100%);
+    opacity: 0;
+    transition: all 0.6s ease;
+}
+
+.product-active .fullscreen-product {
+    transform: translateX(0);
+    opacity: 1;
 }
 
 .fullscreen-product .codigo {
@@ -129,4 +196,25 @@ body {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* Layout para modo producto activo */
+.product-layout {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
+
+.logo-section {
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.product-section {
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
