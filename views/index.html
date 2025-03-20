@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Escáner de Productos</title>
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- Video promocional -->
@@ -22,12 +25,11 @@
 
     <button class="fullscreen-exit">×</button>
     
-    <div class="fullscreen-header">
-        <h1>Escáner de Productos</h1>
-    </div>
-    
     <div class="fullscreen-message">
-        Escanea un código de barras para ver la información del producto...
+        <div class="scanner-container">
+            <div class="scan-line"></div>
+        </div>
+        <div>Escanea un código de barras para ver la información del producto</div>
     </div>
     
     <div id="product-container"></div>

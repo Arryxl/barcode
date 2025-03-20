@@ -1,5 +1,5 @@
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Poppins', 'Arial', sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f0f8ff;
@@ -7,6 +7,7 @@ body {
     flex-direction: column;
     min-height: 100vh;
     overflow: hidden;
+    color: #333;
 }
 
 /* Estilos para el video promocional */
@@ -18,7 +19,7 @@ body {
     height: 100%;
     z-index: 0;
     overflow: hidden;
-    transition: opacity 0.5s ease;
+    transition: opacity 0.8s ease;
 }
 
 .promo-video {
@@ -44,15 +45,24 @@ body {
 
 /* Posición del logo cuando se muestra un producto */
 .product-active .logo-container {
-    left: 15%;
     top: 50%;
-    transform: translateY(-50%) translateX(-50%);
+    left: 15%;
+    transform: translate(-50%, -50%);
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.product-active .logo {
+    width: 80%;
+    max-width: 250px;
 }
 
 /* Ocultar video cuando se muestra un producto */
 .product-active .promo-video-container {
-    opacity: 0;
-    pointer-events: none;
+    opacity: 0.05;
+    filter: blur(12px);
 }
 
 .fullscreen-mode {
@@ -61,7 +71,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(240, 248, 255, 0.9);
+    background-color: rgba(255, 255, 255, 0.95);
     z-index: 9999;
     display: flex;
     justify-content: center;
@@ -69,22 +79,9 @@ body {
     overflow: hidden;
 }
 
+/* Ocultar header en el diseño moderno */
 .fullscreen-header {
-    background-color: #3498db;
-    color: white;
-    padding: 20px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    text-align: center;
-    z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-.fullscreen-header h1 {
-    margin: 0;
-    font-size: 24px;
+    display: none;
 }
 
 .fullscreen-exit {
@@ -95,126 +92,232 @@ body {
     color: #333;
     border: none;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
     cursor: pointer;
     z-index: 2000;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.fullscreen-exit:hover {
+    transform: scale(1.1);
+    background-color: rgba(255, 255, 255, 1);
 }
 
 .fullscreen-message {
     text-align: center;
-    color: #7f8c8d;
-    font-size: 2rem;
-    padding: 20px;
-    margin-top: 80px;
+    color: #64748b;
+    font-size: 1.8rem;
+    padding: 40px;
+    margin-top: 0;
     z-index: 1100;
-    position: relative;
-    background-color: rgba(255, 255, 255, 0.85);
-    border-radius: 10px;
-    max-width: 80%;
-    margin-left: auto;
-    margin-right: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    max-width: 600px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 #product-container {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
-    margin-top: 80px;
-    min-height: 70vh;
+    min-height: 100vh;
     width: 100%;
     z-index: 1200;
     position: relative;
     transition: all 0.5s ease;
-    padding-right: 5%;
 }
 
 .fullscreen-product {
     width: 70%;
     max-width: 800px;
     background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-    padding: 30px;
-    text-align: center;
-    position: relative;
-    transform: translateX(100%);
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    padding: 50px;
+    text-align: left;
+    position: absolute;
+    top: 50%;
+    left: 65%;
+    transform: translate(-50%, -50%) translateY(50px);
     opacity: 0;
-    transition: all 0.6s ease;
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .product-active .fullscreen-product {
-    transform: translateX(0);
+    transform: translate(-50%, -50%) translateY(0);
     opacity: 1;
 }
 
 .fullscreen-product .codigo {
-    font-size: 14px;
-    color: #666;
-    background-color: #f5f5f5;
+    font-size: 16px;
+    color: #64748b;
+    background-color: #f1f5f9;
     padding: 8px 15px;
-    border-radius: 5px;
+    border-radius: 8px;
     display: inline-block;
-    margin-bottom: 15px;
-    font-family: monospace;
+    margin-bottom: 30px;
+    font-family: 'Roboto Mono', monospace;
+    letter-spacing: 0.5px;
 }
 
 .fullscreen-product .precio {
-    font-size: 3.5rem;
-    color: #e74c3c;
+    font-size: 4rem;
+    color: #2563eb;
     font-weight: bold;
-    margin: 20px 0;
+    margin: 25px 0;
 }
 
 .fullscreen-product .nombre {
-    font-size: 1.8rem;
-    margin-bottom: 15px;
-    color: #2c3e50;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #1e293b;
+    font-weight: 600;
 }
 
 .fullscreen-product .descripcion {
-    font-size: 1.2rem;
-    color: #7f8c8d;
-    margin-top: 15px;
+    font-size: 1.4rem;
+    color: #64748b;
+    margin-top: 25px;
+    line-height: 1.6;
+    max-width: 80%;
 }
 
 .product-animation {
-    animation: fadeInUp 0.4s ease-out;
+    animation: fadeInUp 0.5s ease-out;
 }
 
 @keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translate(-50%, -50%) translateY(30px);
     }
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translate(-50%, -50%) translateY(0);
     }
 }
 
-/* Layout para modo producto activo */
-.product-layout {
-    display: flex;
+/* Estilos para el icono de escáner */
+.scanner-icon {
+    font-size: 60px;
+    color: #2563eb;
+    margin-bottom: 30px;
+    animation: scan 2s infinite;
+}
+
+@keyframes scan {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: translateY(-10px) scale(1.1);
+        opacity: 0.7;
+    }
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Nuevo estilo de escáner con línea de escaneo */
+.scanner-container {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 30px;
+    border-radius: 15px;
+    overflow: hidden;
+    background-color: rgba(37, 99, 235, 0.1);
+}
+
+.scan-line {
+    position: absolute;
     width: 100%;
-    height: 100vh;
+    height: 2px;
+    background-color: #2563eb;
+    top: 0;
+    left: 0;
+    box-shadow: 0 0 8px 2px rgba(37, 99, 235, 0.6);
+    animation: scanLine 2s ease-in-out infinite;
 }
 
-.logo-section {
-    width: 30%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+@keyframes scanLine {
+    0% {
+        top: 0;
+    }
+    50% {
+        top: 100%;
+    }
+    100% {
+        top: 0;
+    }
 }
 
-.product-section {
-    width: 70%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* Estilos para el mensaje de producto no encontrado */
+.error-message {
+    color: #e11d48;
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.error-description {
+    color: #64748b;
+    font-size: 1.2rem;
+    margin-top: 20px;
+}
+
+/* Efecto de desvanecimiento para la transición */
+.fade-out {
+    opacity: 0;
+    transform: translate(-50%, -50%) translateY(20px) !important;
+}
+
+/* Media queries para responsividad */
+@media (max-width: 1024px) {
+    .product-active .logo-container {
+        top: 15%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+    }
+    
+    .fullscreen-product {
+        width: 90%;
+        left: 50%;
+        top: 55%;
+        padding: 30px;
+    }
+    
+    .fullscreen-product .descripcion {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .product-active .logo {
+        width: 150px;
+    }
+    
+    .fullscreen-product .precio {
+        font-size: 3rem;
+    }
+    
+    .fullscreen-product .nombre {
+        font-size: 1.8rem;
+    }
 }

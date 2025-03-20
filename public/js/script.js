@@ -1,3 +1,6 @@
+// Variable global para el temporizador
+let productResetTimer = null;
+
 document.addEventListener('DOMContentLoaded', function() {
     let scanBuffer = '';
     let lastScanTime = 0;
@@ -26,10 +29,39 @@ document.addEventListener('DOMContentLoaded', function() {
             scanBuffer += event.key;
         }
     });
+
+    // Añade un icono de escáner animado al mensaje inicial con línea de escaneo
+    const mensajeInicial = document.querySelector('.fullscreen-message');
+    if (mensajeInicial) {
+        mensajeInicial.innerHTML = `
+            <div class="scanner-container">
+                <div class="scan-line"></div>
+            </div>
+            <div>Escanea un código de barras para ver la información del producto</div>
+        `;
+    }
 });
 
 function procesarCodigoEscaneado(codigo) {
     console.log('Código escaneado:', codigo);
+    
+    // Cancelar cualquier temporizador activo
+    if (productResetTimer) {
+        clearTimeout(productResetTimer);
+        productResetTimer = null;
+    }
+    
+    // Añadir efecto de escaneo
+    const mensajeExistente = document.querySelector('.fullscreen-message');
+    if (mensajeExistente) {
+        mensajeExistente.innerHTML = `
+            <div class="scanner-container">
+                <div class="scan-line"></div>
+            </div>
+            <div>Procesando código...</div>
+        `;
+    }
+    
     fetch(`http://localhost:3000/api/allproductos?codigo=${codigo}`)
     .then(response => {
         if (!response.ok) {
@@ -49,8 +81,10 @@ function procesarCodigoEscaneado(codigo) {
         const mensajeExistente = document.querySelector('.fullscreen-message');
         if (mensajeExistente) {
             mensajeExistente.style.display = 'block';
-            mensajeExistente.innerHTML = 'Error al buscar el producto. Intente nuevamente.';
-            mensajeExistente.style.color = '#e74c3c';
+            mensajeExistente.innerHTML = `
+                <div class="error-message">Error al buscar el producto</div>
+                <div class="error-description">Intente nuevamente o contacte con soporte técnico.</div>
+            `;
         }
        
         const productContainer = document.getElementById('product-container');
@@ -98,13 +132,22 @@ function mostrarProductoPantallaCompleta(producto) {
     setTimeout(() => {
         const product = document.querySelector('.fullscreen-product');
         if (product) {
-            product.style.transform = 'translateX(0)';
             product.style.opacity = '1';
+            product.style.transform = 'translate(-50%, -50%) translateY(0)';
         }
     }, 50);
     
     const audio = new Audio('/sounds/beep-success.mp3');
     audio.play().catch(e => console.log('No se pudo reproducir el sonido'));
+    
+    // Configurar temporizador para revertir al estado inicial después de 5 segundos
+    if (productResetTimer) {
+        clearTimeout(productResetTimer);
+    }
+    
+    productResetTimer = setTimeout(() => {
+        reverterAEstadoInicial();
+    }, 5000);
 }
 
 function mostrarProductoNoEncontradoPantallaCompleta() {
@@ -115,9 +158,9 @@ function mostrarProductoNoEncontradoPantallaCompleta() {
     if (mensajeExistente) {
         mensajeExistente.style.display = 'block';
         mensajeExistente.innerHTML = `
-            <div style="margin-bottom: 20px;">⚠️</div>
-            <div style="color: #e74c3c; font-size: 3rem;">Producto no encontrado</div>
-            <div style="font-size: 1.5rem; margin-top: 20px; color: #7f8c8d;">
+            <div style="font-size: 56px; margin-bottom: 20px;">⚠️</div>
+            <div class="error-message">Producto no encontrado</div>
+            <div class="error-description">
                 El código escaneado no corresponde a ningún producto registrado.
             </div>
         `;
@@ -130,4 +173,59 @@ function mostrarProductoNoEncontradoPantallaCompleta() {
     
     const audio = new Audio('/sounds/beep-error.mp3');
     audio.play().catch(e => console.log('No se pudo reproducir el sonido'));
+    
+    // Configurar temporizador para revertir al estado inicial después de 5 segundos
+    if (productResetTimer) {
+        clearTimeout(productResetTimer);
+    }
+    
+    productResetTimer = setTimeout(() => {
+        reverterAEstadoInicial();
+    }, 5000);
+}
+
+function reverterAEstadoInicial() {
+    // Aplicar clase de transición de salida
+    const productElement = document.querySelector('.fullscreen-product');
+    if (productElement) {
+        productElement.classList.add('fade-out');
+        
+        // Esperar a que termine la animación
+        setTimeout(() => {
+            // Eliminar clase de producto activo
+            document.body.classList.remove('product-active');
+            
+            // Mostrar mensaje inicial
+            const mensajeExistente = document.querySelector('.fullscreen-message');
+            if (mensajeExistente) {
+                mensajeExistente.style.display = 'block';
+                mensajeExistente.innerHTML = `
+                    <div class="scanner-container">
+                        <div class="scan-line"></div>
+                    </div>
+                    <div>Escanea un código de barras para ver la información del producto</div>
+                `;
+            }
+            
+            // Limpiar contenedor de producto
+            const productContainer = document.getElementById('product-container');
+            if (productContainer) {
+                productContainer.innerHTML = '';
+            }
+        }, 600);
+    } else {
+        // Si no hay producto, simplemente restaurar el mensaje inicial
+        document.body.classList.remove('product-active');
+        
+        const mensajeExistente = document.querySelector('.fullscreen-message');
+        if (mensajeExistente) {
+            mensajeExistente.style.display = 'block';
+            mensajeExistente.innerHTML = `
+                <div class="scanner-container">
+                    <div class="scan-line"></div>
+                </div>
+                <div>Escanea un código de barras para ver la información del producto</div>
+            `;
+        }
+    }
 }

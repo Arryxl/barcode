@@ -86,26 +86,18 @@ app.get('/api/allproductos', async (req, res) => {
     ISNULL(RTRIM(f131_id), '') AS Barras,  
     v121_referencia,
     
-    dbo.F_GENERICO_HALLAR_PREC_VTA(
-        v121_id_cia,
-        '${listaPreco}',
-        v121_rowid_item,
-        GETDATE(),
-        v121_id_unidad_inventario
-    ) AS Precio,
-    
+    dbo.F_GENERICO_HALLAR_PREC_VTA(${company},'${listaPreco}',v121_rowid_item, GETDATE(), v121_id_unidad_inventario) AS Precio,    
     CASE
-        WHEN ISNUMERIC(LTRIM(RTRIM(dbo.F_GENERICO_HALLAR_MOVTO_ENT(f131_id_cia, ISNULL(v121_rowid_entidad_item, 0), '${centroOperacion}', 'FACTOR', 3)))) = 1
-        THEN CAST(LTRIM(RTRIM(dbo.F_GENERICO_HALLAR_MOVTO_ENT(f131_id_cia, ISNULL(v121_rowid_entidad_item, 0), '${centroOperacion}', 'FACTOR', 3))) AS DECIMAL(28,4))
+        WHEN ISNUMERIC(LTRIM(RTRIM(dbo.F_GENERICO_HALLAR_MOVTO_ENT(${company}, ISNULL(v121_rowid_entidad_item, 0), '${listaPreco}', 'FACTOR', 3)))) = 1
+        THEN CAST(LTRIM(RTRIM(dbo.F_GENERICO_HALLAR_MOVTO_ENT(${company}, ISNULL(v121_rowid_entidad_item, 0), '${listaPreco}', 'FACTOR', 3))) AS DECIMAL(28,4))
         ELSE 0
     END AS Factor,  
     f101_descripcion AS UnidadMedida  
-FROM t131_mc_items_barras
-INNER JOIN t121_mc_items_extensiones ON f121_rowid = f131_rowid_item_ext  
-INNER JOIN v121 ON f121_rowid_item = v121_rowid_item AND f121_rowid = v121_rowid_item_ext  
-INNER JOIN t101_mc_unidades_medida ON f101_id_cia = v121_id_cia AND f101_id = v121_id_unidad_inventario
-INNER JOIN t126_mc_items_precios ON f126_rowid_item = v121_rowid_item
-WHERE f126_id_lista_precio = '${listaPreco}' AND f126_id_cia = ${company} AND f131_id_co = '${centroOperacion}' AND f131_id = '${codigo}'`;
+from t131_mc_items_barras
+		inner join t121_mc_items_extensiones on f121_rowid = f131_rowid_item_ext
+		inner join v121 on f121_rowid_item = v121_rowid_item and f121_rowid=v121_rowid_item_ext
+		INNER JOIN t101_mc_unidades_medida ON f101_id_cia = v121_id_cia AND f101_id = v121_id_unidad_inventario
+		left join t122_mc_items_unidades on f122_id_cia = f131_id_cia and f122_rowid_item = v121_rowid_item and f122_id_unidad = f131_id_unidad_medida`;
         const result = await pool.request().query(query);
         res.json(result.recordset);
     } catch (err) {
