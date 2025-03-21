@@ -6,9 +6,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let lastScanTime = 0;
     const SCAN_TIMEOUT = 50;
 
-    const exitButton = document.querySelector('.fullscreen-exit');
-    exitButton.addEventListener('click', salirModoPantallaCompleta);
-
     document.addEventListener('keydown', function(event) {
         const currentTime = new Date().getTime();
 
@@ -37,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="scanner-container">
                 <div class="scan-line"></div>
             </div>
-            <div>Escanea un código de barras para ver la información del producto</div>
+            <div>Verificador de precios</div>
         `;
     }
 });
@@ -121,9 +118,8 @@ function mostrarProductoPantallaCompleta(producto) {
     
     productoElement.innerHTML = `
         <div class="codigo">Código: ${producto.Barras}</div>
+        <div class="nombre">${producto.Descripcion || ''}</div>
         <div class="precio">$${producto.Precio.toLocaleString('es-ES')}.00</div>
-        <div class="nombre">${producto.UnidadMedida}</div>
-        <div class="descripcion">${producto.Descripcion || ''}</div>
     `;
     
     productContainer.appendChild(productoElement);
@@ -136,9 +132,6 @@ function mostrarProductoPantallaCompleta(producto) {
             product.style.transform = 'translate(-50%, -50%) translateY(0)';
         }
     }, 50);
-    
-    const audio = new Audio('/sounds/beep-success.mp3');
-    audio.play().catch(e => console.log('No se pudo reproducir el sonido'));
     
     // Configurar temporizador para revertir al estado inicial después de 5 segundos
     if (productResetTimer) {
@@ -203,7 +196,7 @@ function reverterAEstadoInicial() {
                     <div class="scanner-container">
                         <div class="scan-line"></div>
                     </div>
-                    <div>Escanea un código de barras para ver la información del producto</div>
+                    <div>Verificador de precios</div>
                 `;
             }
             

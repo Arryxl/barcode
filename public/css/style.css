@@ -31,14 +31,15 @@ body {
 /* Estilos para el logo */
 .logo-container {
     position: fixed;
-    top: 20px;
-    left: 20px;
+    top: 40px;
+    left: 40px;
     z-index: 1500;
     transition: all 0.8s ease;
+    transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 .logo {
-    width: 150px;
+    width: 170px;
     height: auto;
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
 }
@@ -46,7 +47,7 @@ body {
 /* Posición del logo cuando se muestra un producto */
 .product-active .logo-container {
     top: 50%;
-    left: 15%;
+    left: 20%; /* Cambio de 15% a 30% para moverlo más hacia el centro */
     transform: translate(-50%, -50%);
     width: 30%;
     display: flex;
@@ -84,49 +85,23 @@ body {
     display: none;
 }
 
-.fullscreen-exit {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background-color: rgba(255, 255, 255, 0.9);
-    color: #333;
-    border: none;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    font-size: 24px;
-    cursor: pointer;
-    z-index: 2000;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: transform 0.3s ease, background-color 0.3s ease;
-}
-
-.fullscreen-exit:hover {
-    transform: scale(1.1);
-    background-color: rgba(255, 255, 255, 1);
-}
-
 .fullscreen-message {
     text-align: center;
-    color: #64748b;
+    color: #000000;
     font-size: 1.8rem;
-    padding: 40px;
+    padding: 40px 80px;
     margin-top: 0;
     z-index: 1100;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: rgba(255, 255, 255, 0.95);
+    background-color: rgba(255, 255, 255, 0.13);
     border-radius: 20px;
     max-width: 600px;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
     transition: transform 0.5s ease, opacity 0.5s ease;
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 #product-container {
@@ -140,21 +115,6 @@ body {
     transition: all 0.5s ease;
 }
 
-.fullscreen-product {
-    width: 70%;
-    max-width: 800px;
-    background-color: white;
-    border-radius: 24px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    padding: 50px;
-    text-align: left;
-    position: absolute;
-    top: 50%;
-    left: 65%;
-    transform: translate(-50%, -50%) translateY(50px);
-    opacity: 0;
-    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
 
 .product-active .fullscreen-product {
     transform: translate(-50%, -50%) translateY(0);
@@ -162,10 +122,10 @@ body {
 }
 
 .fullscreen-product .codigo {
-    font-size: 16px;
+    font-size: 1.4rem; /* Aumentar tamaño */
     color: #64748b;
     background-color: #f1f5f9;
-    padding: 8px 15px;
+    padding: 10px 20px;
     border-radius: 8px;
     display: inline-block;
     margin-bottom: 30px;
@@ -173,18 +133,41 @@ body {
     letter-spacing: 0.5px;
 }
 
-.fullscreen-product .precio {
-    font-size: 4rem;
-    color: #2563eb;
-    font-weight: bold;
-    margin: 25px 0;
-}
-
 .fullscreen-product .nombre {
-    font-size: 2.5rem;
+    font-size: 4.5rem; /* Mucho más grande */
     margin-bottom: 20px;
     color: #1e293b;
-    font-weight: 600;
+    font-weight: 700;
+    line-height: 1.2;
+    width: 100%;
+}
+
+.fullscreen-product .precio {
+    font-size: 4rem; /* Muy grande pero menor que el nombre */
+    color: #2563eb;
+    font-weight: bold;
+    margin: 20px 0 30px;
+    width: 100%;
+}
+
+.fullscreen-product {
+    width: 70%;
+    max-width: 800px;
+    background-color: white;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    padding: 50px;
+    text-align: center; /* Centrar todo el contenido */
+    position: absolute;
+    top: 50%;
+    left: 65%;
+    transform: translate(-50%, -50%) translateY(50px);
+    opacity: 0;
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centrado vertical */
+    align-items: center; /* Centrado horizontal */
 }
 
 .fullscreen-product .descripcion {
@@ -216,6 +199,20 @@ body {
     color: #2563eb;
     margin-bottom: 30px;
     animation: scan 2s infinite;
+}
+
+@keyframes pulseHighlight {
+    0% { transform: scale(1); }
+    16.67% { transform: scale(1.05); }
+    33.33% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    66.67% { transform: scale(1); }
+    83.33% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.fullscreen-product .precio {
+    animation: pulseHighlight 4s ease-in-out infinite;
 }
 
 @keyframes scan {
@@ -320,4 +317,32 @@ body {
     .fullscreen-product .nombre {
         font-size: 1.8rem;
     }
+}
+
+.author-signature {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    font-size: 0.75rem;
+    color: rgba(100, 116, 139, 0.7);
+    font-family: 'Poppins', sans-serif;
+    z-index: 1000;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.3s ease;
+}
+
+.author-signature a {
+    color: rgba(37, 99, 235, 0.8);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.author-signature a:hover {
+    color: rgba(37, 99, 235, 1);
+}
+
+/* Hacer la firma más sutil cuando se muestra un producto */
+.product-active .author-signature {
+    opacity: 0.5;
 }

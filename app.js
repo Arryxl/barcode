@@ -77,7 +77,6 @@ app.get('/api/allproductos', async (req, res) => {
         
         const listaPreco = process.env.LISTA_PRECO;
         const company = process.env.COMPANY;
-        const centroOperacion = process.env.CENTRO_OPERACION;
         
         let query = `
             SELECT
@@ -97,9 +96,12 @@ from t131_mc_items_barras
 		inner join t121_mc_items_extensiones on f121_rowid = f131_rowid_item_ext
 		inner join v121 on f121_rowid_item = v121_rowid_item and f121_rowid=v121_rowid_item_ext
 		INNER JOIN t101_mc_unidades_medida ON f101_id_cia = v121_id_cia AND f101_id = v121_id_unidad_inventario
-		left join t122_mc_items_unidades on f122_id_cia = f131_id_cia and f122_rowid_item = v121_rowid_item and f122_id_unidad = f131_id_unidad_medida`;
+		left join t122_mc_items_unidades on f122_id_cia = f131_id_cia and f122_rowid_item = v121_rowid_item and f122_id_unidad = f131_id_unidad_medida
+        WHERE f131_id = '${codigo}'`;
         const result = await pool.request().query(query);
         res.json(result.recordset);
+    console.log(query);
+    console.log(codigo);
     } catch (err) {
         console.error('Error en la consulta:', err);
         res.status(500).json({ mensaje: 'Error en el servidor', error: err.message });
